@@ -19,12 +19,6 @@
     src: nomad_config.j2
     dest: /etc/nomad.d/nomad_global_config.conf
 
-    #- name: Enable in systemd
-    #  systemd:
-    #     name: nomad
-    #     enabled: yes
-    #     masked: no
-
 - name: Enabling dev mode
   template:
     src: nomad_dev_systemd.j2
