@@ -1,0 +1,13 @@
+#client {
+#  options = {
+#    "driver.blacklist" = "java"
+#  }
+#}
+plugin "docker" {
+  config {
+    allow_privileged = true
+    volumes {
+      enabled      = true
+    }
+  }
+}

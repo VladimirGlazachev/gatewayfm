@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  serial: 1
+  gather_facts: true
+
+  vars_files:
+    - "vars/generic.yml"
+
+  roles:
+  - nomadprovisioning

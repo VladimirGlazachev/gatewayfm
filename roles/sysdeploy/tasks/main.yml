@@ -1,0 +1,24 @@
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: eth-node
+
+- name: Set a private ip
+  template: src=princate.network.j2 dest=/etc/systemd/network/private.network
+
+- name: Restart service systemd-networkd
+  ansible.builtin.service:
+    name: systemd-networkd
+    state: restarted
+
+- filesystem:
+    fstype: ext4
+    dev: /dev/vda1
+
+- name: mount and adding into fstab
+  mount:
+    fstype: ext4
+    src: /dev/vda1
+    path: /mnt/data
+    state: mounted
+
+ 

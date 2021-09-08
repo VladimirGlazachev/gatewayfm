@@ -1,0 +1,14 @@
+job "erigon_rpcdaemon" {
+  datacenters = ["dc1"]
+  group "erigon" {
+    count = 1
+    task "rpcdaemon" {
+      driver = "docker"
+      config {
+        pid_mode = "host"
+        image = "studzvg/erigon_rpcdaemon:07092021"
+        volumes = ["/mnt/data/xdg_data/erigon:/home/erigon/.local/share/erigon"]
+      }
+    }
+  }
+}

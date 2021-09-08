@@ -1,0 +1,13 @@
+job "erigon" {
+  datacenters = ["dc1"]
+  group "erigon" {
+    count = 1
+    task "erigon" {
+      driver = "docker"
+      config {
+        image = "studzvg/erigon:07092021"
+        volumes = ["/mnt/data/xdg_data/erigon:/home/erigon/.local/share/erigon"]
+      }
+    }
+  }
+}

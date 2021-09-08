@@ -1,0 +1,65 @@
+- name: Adding gpg key
+  apt_key:
+    url: "https://apt.releases.hashicorp.com/gpg"
+    state: present
+
+- name: Adding apt repository
+  template:
+    src: nomad.list.j2
+    dest: /etc/apt/sources.list.d/hashicorp_com.list
+
+- name: install nomad
+  apt:
+    name: nomad
+    state: latest
+    update_cache: yes
+
+- name: Adding nomad global config
+  template:
+    src: nomad_config.j2
+    dest: /etc/nomad.d/nomad_global_config.conf
+
+    #- name: Enable in systemd
+    #  systemd:
+    #     name: nomad
+    #     enabled: yes
+    #     masked: no
+
+- name: Enabling dev mode
+  template:
+    src: nomad_dev_systemd.j2
+    dest: /etc/systemd/system/nomad.service
+  when: dev_mode is defined 
+
+- name: daemon-reload
+  systemd:
+         daemon_reload: yes
+
+- name: Start in systemd
+  systemd:
+         name: nomad
+         state: started
+         masked: no
+
+- name: provisionning job erigon
+  template:
+    src:  erigon.nomad.j2
+    dest: /etc/nomad.d/erigon.nomad
+
+- name: provisionning job rpcdaemon
+  template:
+    src:  erigon_rpccommand.nomad.j2
+    dest: /etc/nomad.d/erigon_rpccommand.nomad
+
+- wait_for:
+    port: 4646
+
+- name: deploying JOB erigon
+  shell: | 
+    nomad job stop erigon
+    nomad job run  /etc/nomad.d/erigon.nomad
+
+- name: deploying JOB erigon_rpccommand
+  shell: |
+    nomad job stop erigon_rpcdaemon
+    nomad job run /etc/nomad.d/erigon_rpccommand.nomad

@@ -1,0 +1,6 @@
+[erigon]
+eth-node hostname_check=eth-node
+
+[erigon:vars]
+dev_mode=yes
+

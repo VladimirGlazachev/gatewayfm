@@ -1,0 +1,6 @@
+---
+{
+# general vars
+  "version_nomad": 1,
+  "mode": "dev"
+}
